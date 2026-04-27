@@ -37,30 +37,39 @@ def main():
     try:
         service = build("calendar", "v3", credentials=creds)
 
-        # Call the Calendar API
-        now = datetime.datetime.now(tz=datetime.timezone.utc).isoformat()
-        print("Getting the upcoming 10 events")
-        events_result = (
-            service.events()
-            .list(
-                calendarId="primary",
-                timeMin=now,
-                maxResults=10,
-                singleEvents=True,
-                orderBy="startTime",
-            )
-            .execute()
-        )
-        events = events_result.get("items", [])
+        moods = {
+            "1": {"name": "Very Happy", "colour", "5"},
+            "2": {"name": "Sort of Happy", "colour", "2"},
+            "3": {"name": "Neutral", "colour", "8"},
+            "4": {"name": "Uninterested", "colour", "6"},
+            "5": {"name": "Very Uniterested", "colour", "1"}
+        }
 
-        if not events:
-            print("No upcoming events found.")
-            return
+        print("\n--- Aya's Mood Tracker ---")
+        for key, value in moods.items():
+            print(f"{key}: {value['name']}")
 
-        # Prints the start and name of the next 10 events
-        for event in events:
-            start = event["start"].get("dateTime", event["start"].get("date"))
-            print(start, event["summary"])
+        choice = input("\nHow are you feeling today (1-5)\t")
+        notes = input("Any notes for today?\t")
+
+        if choice in moods:
+            selected = moods[choice]
+            today = datetime.date.today().isoformat()
+
+            event_body = {
+                'summary': f"Mood: {selected['name']}",
+                'description': notes,
+                'start': {'date': today},
+                'end': {'date': today},
+                'colourId': selected['colour'],
+            }
+
+            event = service.events().insert(calendarId='primary', body=event_body).execute()
+            print(f"\nSuccessfully logged! View here: {event.get('htmlLink')}")
+
+        else:
+            print("Invalid choice. No mood logged.")
+    
 
     except HttpError as error:
         print(f"An error occurred: {error}")
