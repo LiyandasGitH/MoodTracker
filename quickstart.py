@@ -38,11 +38,11 @@ def main():
         service = build("calendar", "v3", credentials=creds)
 
         moods = {
-            "1": {"name": "Very Happy", "colour", "5"},
-            "2": {"name": "Sort of Happy", "colour", "2"},
-            "3": {"name": "Neutral", "colour", "8"},
-            "4": {"name": "Uninterested", "colour", "6"},
-            "5": {"name": "Very Uniterested", "colour", "1"}
+            "1": {"name": "Very Happy", "color": "5"},
+            "2": {"name": "Sort of Happy", "color": "2"},
+            "3": {"name": "Neutral", "color": "8"},
+            "4": {"name": "Uninterested", "color": "6"},
+            "5": {"name": "Very Uniterested", "color": "1"}
         }
 
         print("\n--- Aya's Mood Tracker ---")
@@ -61,10 +61,11 @@ def main():
                 'description': notes,
                 'start': {'date': today},
                 'end': {'date': today},
-                'colourId': selected['colour'],
+                'colorId': selected['color'],
             }
+            calendarId = "869bb6fc60cb3801eb2b1ffce5bcef7bbfd0681cdc08f37766489bab62448442@group.calendar.google.com"
 
-            event = service.events().insert(calendarId='primary', body=event_body).execute()
+            event = service.events().insert(calendarId, body=event_body).execute()
             print(f"\nSuccessfully logged! View here: {event.get('htmlLink')}")
 
         else:
