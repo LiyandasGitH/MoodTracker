@@ -49,7 +49,7 @@ def main():
         for key, value in moods.items():
             print(f"{key}: {value['name']}")
 
-        choice = input("\nHow are you feeling today (1-5)\t")
+        choice = input("\nHow is she feeling today (1-5)\t")
         notes = input("Any notes for today?\t")
 
         if choice in moods:
